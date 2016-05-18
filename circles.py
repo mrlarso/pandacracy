@@ -19,7 +19,7 @@ def getCircleInfo(circle):
     os.system('clear')
     print "The elected roles of %s are: \nLead Link: %s \nFacilitator: %s \nRep Link: %s \nSecretary: %s \n" % (circle[0],circle[2],circle[3],circle[4],circle[5])
 
-    subCircleList = [circle]
+    subCircleList = []
     subCircleNumber = 1
     for i in myCircles:
         if i[1] == circle[0]:
@@ -29,7 +29,7 @@ def getCircleInfo(circle):
         print circle[0] + " does not have any subcircles.\n"
     else:
         print circle[0]+" has the following subcircles:\n"
-        for i in subCircleList[1:]:
+        for i in subCircleList:
             print str(subCircleNumber) + ". "+i[0]+"\n"
             subCircleNumber += 1
     if circle[1] != "":
@@ -50,11 +50,7 @@ while choice != "exit":
             if i[0] == currentCircle[1]:
                 currentCircle = i
                 subCircleList = getCircleInfo(currentCircle)
-                getCircleInfo(currentCircle)
+#                getCircleInfo(currentCircle)
     else:
+        currentCircle = subCircleList[int(choice)]
         subCircleList = getCircleInfo(subCircleList[int(choice)])
-        getCircleInfo(subCircleList[int(choice)])
-    print "Current Circle "
-    print currentCircle
-    print "choice = "+ choice
-    print subCircleList
