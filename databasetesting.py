@@ -6,6 +6,7 @@ import MySQLdb
 import sys
 import csv
 import re
+import getpass
 
 with open(sys.argv[1], 'rb') as rolesCsv:
     rolesFiltered = (line.replace(';\n',';') for line in rolesCsv)
@@ -17,7 +18,7 @@ with open(sys.argv[1], 'rb') as rolesCsv:
 
 server = raw_input("Server name:  ")
 username = raw_input("username:  ")
-password = raw_input("Password:  ")
+password = getpass.getpass("Password:  ")
 database = raw_input("Database name:  ")
 
 db = MySQLdb.connect(server,username,password,database)
