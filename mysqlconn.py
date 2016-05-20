@@ -12,12 +12,6 @@ import os
 def clear():
     os.system("clear")
 
-with open(sys.argv[1], 'rb') as rolesCsv:
-    rolesFiltered = (line.replace(';\n',';') for line in rolesCsv)
-    myRoles = csv.reader(rolesFiltered)
-    roleList = []
-    for role in myRoles:
-        roleList.append(role)
 
 def connect_to_db():
     clear()
@@ -29,18 +23,21 @@ def connect_to_db():
 #    db = MySQLdb.connect(server,username,password,database)
     db = MySQLdb.connect("localhost","root","mrl3019","energy_points")
     cursor = db.cursor()
-    return cursor, db
+    return cursor
+'''
+with open(sys.argv[1], 'rb') as rolesCsv:
+    rolesFiltered = (line.replace(';\n',';') for line in rolesCsv)
+    myRoles = csv.reader(rolesFiltered)
+    roleList = []
+    for role in myRoles:
+        roleList.append(role)
 
-cursor, db = connect_to_db()
 
 for role in roleList:
     if "'" in role[0]:
         role[0] = re.sub("'","",role[0])
     if "'" in role[1]:
         role[1] = re.sub("'","",role[1])
-
-if roleList[0][0] == 'Role':
-    del roleList[0]
 
 def insert_role_table(roleList):
     sql = "CREATE TABLE ROLES (ROLE CHAR(250) NOT NULL, ENERGIZER CHAR(250), CIRCLE CHAR(250))"
@@ -128,3 +125,4 @@ else:
 
 
 db.close()
+'''

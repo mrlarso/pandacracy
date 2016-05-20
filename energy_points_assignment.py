@@ -4,19 +4,17 @@ import csv
 import re
 import os
 
-def import_rolesheet(roles_csv_file):
-
-    # Creates a list from each line of the csv with roles
-    with open(roles_csv_file, 'rb') as rolesCsv:
-        rolesFiltered = (line.replace(';\n',';') for line in rolesCsv)
-        myRoles = csv.reader(rolesFiltered)
-        roleList = []
-        for role in myRoles:
-            roleList.append(role)
-
-    # Removes the titles row if it exists
-    if roleList[0][0] == 'Role':
-        del roleList[0]
+def import_rolesheet(cursor):
+    # Fetches roles from database and creates a list of roles
+    cursor.execute( "SELECT * FROM ROLES")
+    roles = cursor.fetchall()
+    roleList = []
+    for row in roles:
+        role = []
+        role.append(i[0])
+        role.append(i[1])
+        role.append(i[2])
+        roleList.append[role]
 
     # Turns energizer field of role into a list
     for x in range(0,len(roleList)):
@@ -29,13 +27,6 @@ def import_rolesheet(roles_csv_file):
     for role in roleList:
         if not isinstance(role[1], list):
             role[1] = [role[1]]
-
-    # Removes apostrophes from fields (so as to not interfere with mysql syntax)
-    for role in roleList:
-        if "'" in role[0]:
-            role[0] = re.sub("'","",role[0])
-        if "'" in role[1]:
-            role[1] = re.sub("'","",role[1])
 
     return roleList
 '''
