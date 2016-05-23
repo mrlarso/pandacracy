@@ -4,6 +4,9 @@ import csv
 import re
 import os
 
+def clear():
+    os.system("clear")
+
 def import_rolesheet(cursor):
     # Fetches roles from database and creates a list of roles
     cursor.execute( "SELECT * FROM ROLES")
@@ -39,24 +42,30 @@ def import_rolesheet(cursor):
 
 def explore_team (teamList, roleList):
     option = ""
-    while option != "0" and option not in list(map(str, range(len(teamList)))):
-        count = 1
-        for person in teamList:
-            print str(count) + " - " + person
-            count += 1
-        print "\n"
-        print "0. Back to main menu"
-        option =  raw_input("Choose a team member to see their roles:   ")
-        if option in list(map(str, range(len(teamList)))):
-            person = teamList[int(option)-1]
-            person_roles = []
-            for role in roleList:
-                if person in role[1]:
-                    person_roles.append(role)
-            print "%s has %s roles: \n" % (teamList[int(option)-1], str(len(person_roles)))
-            for role in person_roles:
-                print "%s (%s)" % (role[0],role[2])
-            raw_input("Press 'Enter' to return to list of team members")
+    while option != "0":
+        while option not in list(map(str, range(len(teamList)))) and option != "0":
+            count = 1
+            for person in teamList:
+                print str(count) + " - " + person
+                count += 1
+            print "\n"
+            print "0. Back to main menu"
+            teamMember =  raw_input("Choose a team member to see their roles:   ")
+            if teamMember in list(map(str, range(len(teamList)+1))) and teamMember != "0":
+                person = teamList[int(teamMember)-1]
+                person_roles = []
+                clear()
+                for role in roleList:
+                    if person in role[1]:
+                        person_roles.append(role)
+                print "%s has %s roles: \n" % (teamList[int(teamMember)-1], str(len(person_roles)))
+                for role in person_roles:
+                    print "%s (%s)" % (role[0],role[2])
+                raw_input("\nPress 'Enter' to return to list of team members")
+                option = ""
+            if teamMember == "0":
+                option = "0"
+
 
 def get_person_roles(person):
     person_roles = []
