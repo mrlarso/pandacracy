@@ -65,7 +65,6 @@ while option != "0":
             raw_input()
     if option == "4":
         energy_points.check_EP_tables(cursor,db,circleList,roleList)
-        raw_input()
 
 
 clear()
