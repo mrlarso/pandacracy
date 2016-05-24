@@ -7,6 +7,7 @@ import MySQLdb
 #Pandacracy files
 import mysqlconn
 import roles
+import circles
 
 def clear():
     os.system("clear")
@@ -37,15 +38,20 @@ def getRoles(db,cursor):
         mysqlconn.check_roles_database(cursor, db, roleList)
     return roleList, teamList
 
-db, cursor = mysqlconn.connect_to_db()
 
+
+db, cursor = mysqlconn.connect_to_db()
 roleList, teamList = getRoles(db, cursor)
+circleList = circles.import_circlesheet(cursor)
 
 option = ""
 while option != "0":
     option = main_menu()
     if option == "1":
         roles.explore_team(teamList, roleList)
+    if option == "2":
+        clear()
+        circles.explore_circles(circleList,roleList)
     if option == "3":
         if len(sys.argv) < 3:
             clear()

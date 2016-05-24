@@ -12,7 +12,6 @@ import os
 def clear():
     os.system("clear")
 
-
 def connect_to_db():
     clear()
     print "Please enter the database information: \n"

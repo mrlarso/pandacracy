@@ -1,56 +1,78 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
-import sys
 import csv
 import os
 
+def clear():
+    os.system("clear")
 
-# Import csv file and create list of circles
+def import_circlesheet(cursor):
+    cursor.execute("SELECT * FROM CIRCLES")
+    circles = cursor.fetchall()
+    circleList = []
+    for row in circles:
+        circle = []
+        for i in row:
+            circle.extend(row)
+        circleList.append(circle)
+    return circleList
 
-myCircles = []
-with open(sys.argv[1], 'rb') as circlesCsv:
-    circleList = csv.reader(circlesCsv)
-    for circle in circleList:
-        myCircles.append(circle)
-        if circle[1] == "":
-            superestCircle = circle
+def get_roles(circle,roleList):
+    rolesInCircle = []
+    for role in roleList:
+        if role[2] == circle[0]:
+            rolesInCircle.append(role)
+    return rolesInCircle
 
-def getCircleInfo(circle):
-    os.system('clear')
-    print "The elected roles of %s are: \nLead Link: %s \nFacilitator: %s \nRep Link: %s \nSecretary: %s \n" % (circle[0],circle[2],circle[3],circle[4],circle[5])
-
+def get_subcircles (circle,circleList,roleList):
+    rolesInCircle = get_roles(circle,roleList)
     subCircleList = []
-    subCircleNumber = 1
-    for i in myCircles:
+    for i in circleList:
         if i[1] == circle[0]:
             subCircleList.append(i)
+    print "%s has %i subcircles and %i roles\n" % (circle[0],len(subCircleList),len(rolesInCircle))
+    for circle in subCircleList:
+        print "%i - %s\n" %(subCircleList.index(circle) + 1, circle[0])
+    print "\n%i - Explore roles" %(len(subCircleList)+1)
+    print "\n\n0 - Back"
+    return subCircleList, rolesInCircle
 
-    if len(subCircleList) == 0:
-        print circle[0] + " does not have any subcircles.\n"
-    else:
-        print circle[0]+" has the following subcircles:\n"
-        for i in subCircleList:
-            print str(subCircleNumber) + ". "+i[0]+"\n"
-            subCircleNumber += 1
-    if circle[1] != "":
-        print "0. Go back to "+ circle[1]
-    return subCircleList
+def get_supercircle(circle,circleList):
+    for i in circleList:
+        if i[0] == circle[1]:
+            supercircle = i
+    return supercircle
 
-print "You have %s circles\n" % (str(len(myCircles)))
-print "Your highest level circle is %s\n" % (superestCircle[0])
-subCircleList = getCircleInfo(superestCircle)
-currentCircle = superestCircle
-choice = ""
-while choice != "exit":
-    choice = raw_input("Select the number of the circle you would like to know more about, or type 'exit' to exit.")
-    if choice == "exit":
-        break
-    elif choice == "0":
-        for i in myCircles:
-            if i[0] == currentCircle[1]:
-                currentCircle = i
-                subCircleList = getCircleInfo(currentCircle)
-#                getCircleInfo(currentCircle)
-    else:
-        currentCircle = subCircleList[int(choice)]
-        subCircleList = getCircleInfo(subCircleList[int(choice)])
+def explore_circles(circleList,roleList):
+    option = ""
+    for circle in circleList:
+        if circle[1] == "":
+            superestCircle = circle
+    circle = superestCircle
+    while option != "0":
+        clear()
+        if circle == superestCircle:
+            print "You have %s circles\n" %(str(len(circleList)))
+            print "Your highest level circle is %s\n" % (circle [0])
+        else:
+            print circle[0] + " -\n"
+            superCircle = get_supercircle(circle, circleList)
+        subCircleList,rolesInCircle = get_subcircles(circle,circleList,roleList)
+        option = raw_input("\nSelect your prefered option  ")
+        if not option.isdigit() or ((option != "0") and (int(option) not in range(0,len(subCircleList)))):
+            pass
+        elif (option == "0") and (circle != superestCircle):
+            option = ""
+            circle = superCircle
+        elif option > str(len(subCircleList)):
+            clear()
+            print "%s has %i roles - \n" %(circle[0],len(rolesInCircle))
+            for role in rolesInCircle:
+                energizers = ""
+                for energizer in role[1]:
+                    energizers = energizers + energizer + ", "
+                print"%i - %s (%s)\n" %(rolesInCircle.index(role)+1, role[0], energizers[:-2])
+            print "\n"
+            raw_input("Press enter to go back")
+        else:
+            circle = subCircleList[int(option)-1]
