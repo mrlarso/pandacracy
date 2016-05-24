@@ -59,12 +59,12 @@ def explore_circles(circleList,roleList):
             superCircle = get_supercircle(circle, circleList)
         subCircleList,rolesInCircle = get_subcircles(circle,circleList,roleList)
         option = raw_input("\nSelect your prefered option  ")
-        if not option.isdigit() or ((option != "0") and (int(option) not in range(0,len(subCircleList)))):
+        if not option.isdigit() or ((option != "0") and (int(option) not in range(0,len(subCircleList)+2))):
             pass
-        elif (option == "0") and (circle != superestCircle):
+        if (option == "0") and (circle != superestCircle):
             option = ""
             circle = superCircle
-        elif option > str(len(subCircleList)):
+        elif int(option) > len(subCircleList):
             clear()
             print "%s has %i roles - \n" %(circle[0],len(rolesInCircle))
             for role in rolesInCircle:
