@@ -39,7 +39,6 @@ def getRoles(db,cursor):
     return roleList, teamList
 
 
-
 db, cursor = mysqlconn.connect_to_db()
 roleList, teamList = getRoles(db, cursor)
 circleList = circles.import_circlesheet(cursor)

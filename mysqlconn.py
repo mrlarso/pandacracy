@@ -19,8 +19,7 @@ def connect_to_db():
     username = raw_input("username:  ")
     password = getpass.getpass("Password:  ")
     database = raw_input("Database name:  ")
-#    db = MySQLdb.connect(server,username,password,database)
-    db = MySQLdb.connect("localhost","root","mrl3019","energy_points")
+    db = MySQLdb.connect(server,username,password,database)
     cursor = db.cursor()
     return db, cursor
 
